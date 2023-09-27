@@ -20,98 +20,106 @@ const licenseOptions = [
   ];
 
 inquirer
-    .prompt([
-        {
-            type: 'input',
-            message: 'What is the title of your repositiory?',
-            name: 'title',
-        },
-        {
-            type: 'input',
-            message: 'How would you describe the repository?',
-            name: 'description',
-        },
-        {
-            type: 'input',
-            message: 'How would you use the application?',
-            name: 'usage',
-        },
-        {
-            type: 'input',
-            message: 'How would you install it?',
-            name: 'install',
-        },
-        {
-            type: 'input',
-            message: 'What are the contribution guideline?',
-            name: 'contGuide',
-        },
-        {
-            type: 'input',
-            message: 'How would you test it?',
-            name: 'test',
-        },
-        {
-            type: 'list',
-            message: 'Select a license for your application:',
-            name: 'license',
-            choices: licenseOptions,
-          },
-        {
-            type: 'input',
-            message: 'What is your GitHub Username?',
-            name: 'username',
-        },
-        {
-            type: 'input',
-            message: 'What is your email address?',
-            name: 'email',
-        },
-    ])
-    .then((response) => {
-        const readMe = `
-        # ${title}                           ${answer.license}
+  .prompt([
+    {
+      type: 'input',
+      message: 'What is the title of your repository?',
+      name: 'title',
+    },
+    {
+      type: 'input',
+      message: 'How would you describe the repository?',
+      name: 'description',
+    },
+    {
+      type: 'input',
+      message: 'How would you use the application?',
+      name: 'usage',
+    },
+    {
+      type: 'input',
+      message: 'How would you install it?',
+      name: 'install',
+    },
+    {
+      type: 'input',
+      message: 'What are the contribution guidelines?',
+      name: 'contGuide',
+    },
+    {
+      type: 'input',
+      message: 'How would you test it?',
+      name: 'test',
+    },
+    {
+      type: 'list',
+      message: 'Select a license for your application:',
+      name: 'license',
+      choices: licenseOptions.map((option) => option.name),
+    },
+    {
+      type: 'input',
+      message: 'What is your GitHub Username?',
+      name: 'username',
+    },
+    {
+      type: 'input',
+      message: 'What is your email address?',
+      name: 'email',
+    },
+  ])
+  .then((response) => {
+    const { title, description, usage, install, contGuide, test, license, username, email } = response;
 
-        # Description
+    const readmeContent = `
+# ${title} ${licenseOptions.find((option) => option.name === license).value}
 
-        ## ${description}
+## Description
 
-        # Table of Contents
+${description}
 
-        - [Installation](#installation)
-        - [Usage](#usage)
-        - [Contribution](#contribution)
-        - [Test Instructions](#test instructions)
-        - [Licenses](#licenses)
-        - [Questions](#questions)
+## Table of Contents
 
-        # Installation
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contribution](#contribution)
+- [Test Instructions](#test-instructions)
+- [Licenses](#licenses)
+- [Questions](#questions)
 
-        ## ${install}
+## Installation
 
-        # Usage
+${install}
 
-        ## ${usage}
+## Usage
 
-        # Contribution
+${usage}
 
-        ## ${contGuide}
+## Contribution
 
-        # Test Instructions
+${contGuide}
 
-        ## ${test}
+## Test Instructions
 
-        # Licenses
+${test}
 
-        ## ${license}
+## Licenses
 
-        # Questions
+${licenseOptions.find((option) => option.name === license).value}
 
-        ## GitHub Repository: https://github.com/${username}
+## Questions
 
-        ## If you need to contact me you can reach me at ${email}.
-    `
+GitHub Repository: [https://github.com/${username}](https://github.com/${username})
+
+If you need to contact me, you can reach me at ${email}.
+`;
+
+    // Write the README file
+    fs.writeFile(`${title}.md`, readmeContent, (err) => {
+      if (err) {
+        console.error('Error writing README:', err);
+      } else {
+        console.log(`README (${title}.md) generated successfully.`);
+      }
     });
-    fs.writeFile('${title}.md', readMe, (err));
-
-    fs.writeFileSync('${title}.md', readmeContent);
+  });
