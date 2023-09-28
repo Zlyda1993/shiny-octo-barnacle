@@ -114,7 +114,6 @@ GitHub Repository: [https://github.com/${username}](https://github.com/${usernam
 If you need to contact me, you can reach me at ${email}.
 `;
 
-    // Write the README file
     fs.writeFile(`${title}.md`, readmeContent, (err) => {
       if (err) {
         console.error('Error writing README:', err);
